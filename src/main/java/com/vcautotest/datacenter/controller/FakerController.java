@@ -8,12 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Encoder;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,42 +103,6 @@ public class FakerController {
     public int getNegativeInt() {
         int nInt = df.getNumberUpTo(10000);
         return (nInt > 0) ? -nInt : nInt;
-    }
-
-
-    @ApiOperation(value = "获取小数",notes = "获取小数类型数据")
-    @RequestMapping(value = "/getDouble",method = RequestMethod.GET)
-    public double getDouble(@RequestParam(value = "length",required = false) Integer length) {
-        double min = 0.0000000000000000001;
-        double max = 10;
-        int pow = (int) Math.pow(10, 15);
-        double one = Math.floor((Math.random() * (max - min) + min) * pow) / pow;
-        BigDecimal bd = BigDecimal.valueOf(one);
-        double finaldb;
-        if(length != null) {
-            finaldb = bd.setScale(length, BigDecimal.ROUND_HALF_UP).doubleValue();
-        } else{
-            finaldb = bd.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-        }
-        return finaldb;
-    }
-
-
-    @ApiOperation(value = "获取图片",notes = "获取图片的base64编码字符串")
-    @RequestMapping(value = "/getImageString",method = RequestMethod.GET)
-    public String getImageString() {
-        InputStream inputStream = null;
-        byte[] data = null;
-        try {
-            inputStream = new FileInputStream("src/img/testimage.jpg");
-            data = new byte[inputStream.available()];
-            inputStream.read(data);
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(data);
     }
 
 
